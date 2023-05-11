@@ -1,16 +1,17 @@
-import { useState } from 'react'
-import { Footer } from './components/Footer/Footer';
-import { Header } from './components/Header/Header';
-import { Body } from './layouts/Body/Body'
+import "./App.css";
+import { Body } from "./pages/Body/Body";
+import { Footer } from "./common/Footer/Footer";
+import { Header } from "./common/Header/Header";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-export const App = () => {
-
+const App = () => {
   return (
-    <div className='appDesign'>
+    <>
       <Header />
       <Body />
-      <Footer />      
-    </div>
-  )
-}
+      <Footer />
+    </>
+  );
+};
+
+export default App;

@@ -1,0 +1,24 @@
+.headerDesign{
+    height: 10vh;
+    width: 100vw;
+    background: linear-gradient(0deg, #176087 0%, #24b9cc 50%, #176087 100%);
+    color: white;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    top: 0;
+}
+
+.link {
+    font-weight: bold;
+    color: white;
+    transition: 0.5s;
+    margin: 0.5em;
+    cursor: pointer;
+}
+
+.link:hover {
+    color: #EF7B45;
+    transition: 0.5s;
+}
