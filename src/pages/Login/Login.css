@@ -1,9 +1,36 @@
 .loginDesign{
-    height: 80vh;
+    height: 84vh;
     width: 100vw;
-    background-color: red;
         
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.loginForm{
+    height: 70vh;
+    width: 80%;
+    background-color: #24B9CC;
+    border: 1em solid #176087;
+    border-radius: 6%;
+    padding: 2em;
+}
+
+.text-muted{
+    font-weight: bold;
+}
+
+.form{
+    color: white
+}
+
+@media (min-width: 715px) {
+    .loginForm{
+        height: 52vh;
+        width: 40%;
+        background-color: #24B9CC;
+        border: 1em solid #176087;
+        border-radius: 6%;
+        padding: 2em;
+    }
 }
