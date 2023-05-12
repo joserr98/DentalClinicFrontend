@@ -45,8 +45,16 @@ img{
     justify-content: center;
     flex-wrap: wrap;
     align-content: center;
+    font-size: 0.8rem;
 }
 
 .white{
     color: white
+}
+
+      
+@media (min-width: 715px) {
+    .text-section{
+        font-size: 1rem;
+    }
 }

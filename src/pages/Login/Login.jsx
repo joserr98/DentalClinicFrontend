@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Login.css";
-
 import { loginMe } from "../../services/apiCalls";
-import { useNavigate } from "react-router-dom";
-
-import jwt_decode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import { login, userData } from "../userSlice";
-
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-
+import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode"
 export const Login = () => {
   const dispatch = useDispatch();
   const userDataRdx = useSelector(userData);
@@ -30,27 +26,28 @@ export const Login = () => {
     }));
   };
 
-  useEffect(() => {
-    if (userDataRdx.credentials.token) {
-      navigate("/");
-    }
-  }, []);
-
-  const userLogin = () => {
+  const logMeFunction = () => {
     loginMe(credentials)
-      .then((res) => {
-        const decoded = jwt_decode(res.data.token);
+      .then((result) => {
+        const decoded = jwt_decode(result.data.token);
 
         const data = {
-          token: res.data.token,
-          user: decoded,
+          bearer: result.data.token,
+          token: decoded,
         };
 
         dispatch(login({ credentials: data }));
-        setMessage(`Welcome again ${decoded.name}`);
+
+        navigate("/");
       })
-      .catch((err) => console.error(err));
+      .catch((error) => console.error(error));
   };
+
+  useEffect(()=>{
+    if(userDataRdx.credentials.token){
+      navigate("/")
+    };
+  },[]);
 
   return (
     <div className="loginDesign">
@@ -59,27 +56,29 @@ export const Login = () => {
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control
-              type={"email"}
+              type="email"
+              className={"basicInput"}
+              placeholder="Enter email"
               name={"email"}
-              placeholder={"Enter email"}
-              onChange={() => inputHandlerFunction()}
+              onChange={(e) => inputHandlerFunction(e)}
             />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control
-              type={"password"}
+              type="password"
+              className={"basicInput"}
+              placeholder="Enter password"
               name={"password"}
-              placeholder={"Enter password"}
-              onChange={() => inputHandlerFunction()}
+              onChange={(e) => inputHandlerFunction(e)}
             />
           </Form.Group>
           <Form.Group
             className="mb-3"
             controlId="formBasicCheckbox"
           ></Form.Group>
-          <Button variant="primary" onClick={() => userLogin()}>
+          <Button variant="primary" onClick={() => logMeFunction()}>
             Login
           </Button>
         </Form>

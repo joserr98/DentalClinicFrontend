@@ -8,7 +8,6 @@ import fourthSlide from "../../assets/home_image_4.jpg";
 export const Home = () => {
   return (
     <div className="homeDesign white">
-      {/* <HomeCarousel className='homeCarousel orange-w'/> */}
       <div className="section ">
         <div className="img-section">
           <div className="img-div">
