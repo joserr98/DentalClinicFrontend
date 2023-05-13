@@ -1,0 +1,22 @@
+.appointmentDesign{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100vw;
+}
+
+.delete{
+    color:red
+}
+
+.add{
+    color: green;
+}
+
+.edit{
+    color: yellow
+}
+
+.detail{
+    color:blue
+}

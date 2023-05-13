@@ -25,6 +25,17 @@ export const getUserAppointments = async (credentials) => {
     return await axios.get(`http://localhost:5690/appointment/`, config)
 }
 
+export const getDetailedAppointment = async (credentials,data) => {
+
+    const config = {
+        headers: { 
+          'Authorization': 'Bearer '+ credentials.bearer,  
+        }
+    };
+    
+    return await axios.get(`http://localhost:5690/appointment/${data._id}`, config)
+}
+
 export const deleteAppointment = async (id,credentials) => {
     
     const config = {

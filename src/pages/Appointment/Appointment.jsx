@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { userData } from "../userSlice.js";
+import { detail } from "../detailSlice.js";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
-import { getUserAppointments } from "../../services/apiCalls.js";
 import { FiEdit } from "react-icons/fi";
 import { AiFillDelete } from "react-icons/ai";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaEye } from "react-icons/fa";
-import { deleteAppointment } from "../../services/apiCalls";
+import { deleteAppointment, getUserAppointments } from "../../services/apiCalls";
+import "./Appointment.css";
 
 export const Appointment = () => {
   const [userAppointments, setUserAppointments] = useState([]);
 
   const userDataRdx = useSelector(userData);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +32,11 @@ export const Appointment = () => {
       .catch((err) => console.error(err));
   }, []);
 
+  const getAppointmentDetail = (appointment) => {
+    dispatch(detail({ data: appointment }));
+    navigate(`/appointment_detail`)
+  }
+
   const deleteAppointmentFunction = (_id) => {
     deleteAppointment(_id, userDataRdx.credentials)
       .then(() => {
@@ -43,7 +49,7 @@ export const Appointment = () => {
   };
 
   return (
-    <div>
+    <div className="appointmentDesign">
       {userAppointments.length > 0 ? (
         userAppointments.map((appointment) => {
           return (
@@ -51,9 +57,14 @@ export const Appointment = () => {
               <Card>
                 <Card.Body>
                   <Card.Title>{appointment.start_date}</Card.Title>
-                  <Card.Text>Type of intervention: </Card.Text>
                   <Card.Text>
-                    Professional: {appointment.dentist.name}
+                    {appointment.type.treatment.charAt(0).toUpperCase() +
+                      appointment.type.treatment.slice(1)}{" "}
+                  </Card.Text>
+                  <Card.Text>
+                    Professional:{" "}
+                    {appointment.dentist.name.charAt(0).toUpperCase() +
+                      appointment.dentist.name.slice(1)}
                   </Card.Text>
                   <div className="appointmentsButtonDiv">
                     <div
@@ -73,7 +84,10 @@ export const Appointment = () => {
                   <div>
                     <IoIosAddCircleOutline className="add" />
                   </div>
-                  <div className="detail">
+                  <div
+                    className="detail"
+                    onClick={() => getAppointmentDetail(appointment)}
+                  >
                     <FaEye />
                   </div>
                 </Card.Body>
