@@ -54,3 +54,9 @@ export const editAppointment = async (credentials, data, body) => {
     };
     return await axios.put(`http://localhost:5690/appointment/${data._id}`, body, config)
 };
+
+export const createUser = async (credentials) => {
+    credentials.role = 'client'
+    console.log(credentials)
+    return await axios.post(`http://localhost:5690/user`, credentials)
+}

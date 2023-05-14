@@ -1,5 +1,5 @@
 .registerDesign{
-    height: 84vh;
+    height: 90vh;
     width: 100vw;
         
     display: flex;
@@ -8,11 +8,14 @@
 }
 
 .registerForm{
-    height: 85vh;
-    width: 100vw;
+    height: 75vh;
+    width: 80vw;
     background-color: #24B9CC;
     border: 1em solid #176087;
     border-radius: 6%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 2em;
 }
 
@@ -26,8 +29,8 @@
 
 @media (min-width: 715px) {
     .registerForm{
-        height: 85%;
-        width: 80vw;
+        height: 75vh;
+        width: 40vw;
         background-color: #24B9CC;
         border: 1em solid #176087;
         border-radius: 6%;
