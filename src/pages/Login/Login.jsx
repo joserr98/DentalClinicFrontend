@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./Login.css";
 import { loginMe } from "../../services/apiCalls";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,8 +17,6 @@ export const Login = () => {
     email: "",
     password: "",
   });
-
-  const [message, setMessage] = useState("");
 
   const inputHandlerFunction = (e) => {
     setCredentials((prevState) => ({

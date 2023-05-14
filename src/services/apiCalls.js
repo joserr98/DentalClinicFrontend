@@ -45,3 +45,12 @@ export const deleteAppointment = async (id,credentials) => {
     };
     return await axios.delete(`http://localhost:5690/appointment/${id}`, config)
 }
+
+export const editAppointment = async (credentials, data, body) => {
+    const config = {
+        headers: { 
+          'Authorization': 'Bearer ' + credentials.bearer,  
+        }
+    };
+    return await axios.put(`http://localhost:5690/appointment/${data._id}`, body, config)
+};

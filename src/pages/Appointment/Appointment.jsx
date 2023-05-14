@@ -9,6 +9,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaEye } from "react-icons/fa";
 import { deleteAppointment, getUserAppointments } from "../../services/apiCalls";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./Appointment.css";
 
 export const Appointment = () => {
@@ -35,6 +36,11 @@ export const Appointment = () => {
   const getAppointmentDetail = (appointment) => {
     dispatch(detail({ data: appointment }));
     navigate(`/appointment_detail`)
+  }
+
+  const editAppointmentDetail = (appointment) => {
+    dispatch(detail({ data: appointment }));
+    navigate(`/appointment_edit`)
   }
 
   const deleteAppointmentFunction = (_id) => {
@@ -70,6 +76,7 @@ export const Appointment = () => {
                     <div
                       className="appointmentsButton edit"
                       title="Edit appointment"
+                      onClick={() => editAppointmentDetail(appointment)}
                     >
                       <FiEdit />
                     </div>
