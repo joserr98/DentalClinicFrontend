@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Register.css";
 import Button from "react-bootstrap/Button";
@@ -6,7 +6,6 @@ import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../services/apiCalls";
 export const Register = () => {
-
   const navigate = useNavigate();
 
   const [credentials, setCredentials] = useState({
@@ -15,7 +14,7 @@ export const Register = () => {
     email: "",
     password: "",
     address: "",
-    phone_number: ""
+    phone_number: "",
   });
 
   const registerMeFunction = () => {
@@ -25,7 +24,7 @@ export const Register = () => {
       })
       .catch((error) => console.error(error));
   };
-  
+
   const inputHandlerFunction = (e) => {
     setCredentials((prevState) => ({
       ...prevState,
@@ -94,12 +93,13 @@ export const Register = () => {
 
           <Form.Group controlId="formBasicPhone">
             <Form.Label>Phone</Form.Label>
-            <Form.Control               
+            <Form.Control
               type="text"
               className={"basicInput"}
               placeholder="phone_number"
               name={"phone_number"}
-              onChange={(e) => inputHandlerFunction(e)} />
+              onChange={(e) => inputHandlerFunction(e)}
+            />
           </Form.Group>
 
           <Button variant="primary" onClick={() => registerMeFunction()}>

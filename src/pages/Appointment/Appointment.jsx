@@ -8,9 +8,13 @@ import { FiEdit } from "react-icons/fi";
 import { AiFillDelete } from "react-icons/ai";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaEye } from "react-icons/fa";
-import { deleteAppointment, getUserAppointments } from "../../services/apiCalls";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+  deleteAppointment,
+  getUserAppointments,
+} from "../../services/apiCalls";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./Appointment.css";
+import { capitalizeWords, formatedDate } from "../../services/functions.js";
 
 export const Appointment = () => {
   const [userAppointments, setUserAppointments] = useState([]);
@@ -35,13 +39,17 @@ export const Appointment = () => {
 
   const getAppointmentDetail = (appointment) => {
     dispatch(detail({ data: appointment }));
-    navigate(`/appointment_detail`)
-  }
+    navigate(`/appointment_detail`);
+  };
 
   const editAppointmentDetail = (appointment) => {
     dispatch(detail({ data: appointment }));
-    navigate(`/appointment_edit`)
-  }
+    navigate(`/appointment_edit`);
+  };
+
+  const createNewAppointment = () => {
+    navigate(`/appointment_new`);
+  };
 
   const deleteAppointmentFunction = (_id) => {
     deleteAppointment(_id, userDataRdx.credentials)
@@ -62,15 +70,15 @@ export const Appointment = () => {
             <div key={appointment._id}>
               <Card>
                 <Card.Body>
-                  <Card.Title>{appointment.start_date}</Card.Title>
+                  <Card.Title>
+                    {formatedDate(appointment.start_date)}
+                  </Card.Title>
                   <Card.Text>
-                    {appointment.type.treatment.charAt(0).toUpperCase() +
-                      appointment.type.treatment.slice(1)}{" "}
+                    {capitalizeWords(appointment.type.name)}
                   </Card.Text>
                   <Card.Text>
-                    Professional:{" "}
-                    {appointment.dentist.name.charAt(0).toUpperCase() +
-                      appointment.dentist.name.slice(1)}
+                    Dentist: {}
+                    {capitalizeWords(appointment.dentist.name)}
                   </Card.Text>
                   <div className="appointmentsButtonDiv">
                     <div
@@ -88,9 +96,6 @@ export const Appointment = () => {
                       <AiFillDelete />
                     </div>
                   </div>
-                  <div>
-                    <IoIosAddCircleOutline className="add" />
-                  </div>
                   <div
                     className="detail"
                     onClick={() => getAppointmentDetail(appointment)}
@@ -103,8 +108,11 @@ export const Appointment = () => {
           );
         })
       ) : (
-        <div>CARGANDO...</div>
+        <></>
       )}
+      <div className="add" onClick={() => createNewAppointment()}>
+        <IoIosAddCircleOutline />
+      </div>
     </div>
   );
 };

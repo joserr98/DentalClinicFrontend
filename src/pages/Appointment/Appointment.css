@@ -11,6 +11,7 @@
 
 .add{
     color: green;
+    cursor: pointer;
 }
 
 .edit{
