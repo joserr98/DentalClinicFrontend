@@ -28,6 +28,10 @@ export const getDentists = async () => {
   return await axios.get(`http://localhost:5690/user/dentists`);
 };
 
+export const getClients = async () => {
+  return await axios.get(`http://localhost:5690/user/clients`);
+};
+
 // Appointments API Calls
 export const getUserAppointments = async (credentials) => {
   const config = {
@@ -75,6 +79,7 @@ export const editAppointment = async (credentials, data, body) => {
 };
 
 export const createAppointment = async (credentials, body) => {
+    console.log(credentials)
   if (credentials.token.role === "client") {
     body.client = credentials.token.id;
   }
