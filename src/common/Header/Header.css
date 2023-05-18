@@ -1,6 +1,6 @@
 .headerDesign{
     height: 10vh;
-    width: 100vw;
+    width: 100%;
     background: linear-gradient(0deg, #176087 0%, #24b9cc 50%, #176087 100%);
     color: white;
     display: flex;

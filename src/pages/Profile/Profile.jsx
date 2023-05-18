@@ -3,10 +3,11 @@ import "./Profile.css";
 
 import { useSelector } from "react-redux";
 import { userData } from "../userSlice.js";
-
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import { getUserProfile } from "../../services/apiCalls.js";
-import { FiEdit } from "react-icons/fi";
+
 export const Profile = () => {
   const [userProfileData, setUserProfileData] = useState({});
 
@@ -28,24 +29,32 @@ export const Profile = () => {
       .catch((err) => console.error(err));
   }, []);
 
-  const editProfileDetail = () => {
-    navigate(`/profile_edit`);
-  };
-
   return (
     <div className="profileDesign">
       {userProfileData._id !== "" ? (
         <div>
-          <div>{userProfileData.profile_img}</div>
-          <div>{userProfileData.name}</div>
-          <div>{userProfileData.email}</div>
-          <div>{userProfileData.phone_number}</div>
           <div
-            className="appointmentsButton edit"
-            title="Edit appointment"
-            onClick={() => editProfileDetail()}
+            className="modal show"
+            style={{ display: "block", position: "initial" }}
           >
-            <FiEdit />
+            <Modal.Dialog>
+              <Modal.Header>
+                <Modal.Title>{userProfileData.name}</Modal.Title>
+              </Modal.Header>
+
+              <Modal.Body className="profileDataModal">
+                <div>
+                  <a>Name: </a>{userProfileData.name} {userProfileData.lastname}
+                </div>
+                <div><a>Email: </a> {userProfileData.email}</div>
+                <div><a>Phone: </a> {userProfileData.phone_number}</div>
+                <div><a>Address: </a> {userProfileData.address}</div>
+              </Modal.Body>
+
+              <Modal.Footer>
+
+              </Modal.Footer>
+            </Modal.Dialog>
           </div>
         </div>
       ) : (

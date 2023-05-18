@@ -23,7 +23,6 @@ import { Button, Modal } from "react-bootstrap";
 
 export const Appointment = () => {
   const [userAppointments, setUserAppointments] = useState([]);
-  const [criteria, setCriteria] = useState("");
 
   const userDataRdx = useSelector(userData);
   const dispatch = useDispatch();
@@ -82,9 +81,7 @@ export const Appointment = () => {
       .catch((error) => console.error(error));
   };
 
-  const inputHandler = (e) => {
-    setCriteria(e.target.value);
-  };
+
 
   return (
     <div className="appointmentDesign">

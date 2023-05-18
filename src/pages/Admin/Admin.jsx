@@ -6,6 +6,7 @@ import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 import { FiEdit } from "react-icons/fi";
 import { AiFillDelete } from "react-icons/ai";
+import { FcSearch } from "react-icons/fc";
 import { FaEye } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getUsers, editUser, deleteUser } from "../../services/apiCalls.js";
@@ -13,12 +14,13 @@ import "./Admin.css";
 import { capitalizeWords, truncate } from "../../services/functions.js";
 import { Button, Modal, Form } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
+import InputGroup from 'react-bootstrap/InputGroup';
 
 export const Admin = () => {
   const [users, setUsers] = useState([]);
   const userDataRdx = useSelector(userData);
   const navigate = useNavigate();
-
+  const [criteria, setCriteria] = useState("");
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [showModalInfo, setShowModalInfo] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -42,6 +44,9 @@ export const Admin = () => {
 
   const [selectedRole, setSelectedRole] = useState("");
 
+  const inputHandler = (e) => {
+    setCriteria(e.target.value);
+  };
   const roleHandler = (e, role) => {
     e.preventDefault();
     setSelectedRole(role);
@@ -90,14 +95,6 @@ export const Admin = () => {
     }
   }, []);
 
-  useEffect(() => {
-    getUsers(userDataRdx.credentials)
-      .then((results) => {
-        setUsers(results.data);
-      })
-      .catch((err) => console.error(err));
-  }, []);
-
   const editUserFunction = () => {
     editUser(userDataRdx.credentials, selectedUser, editedData)
       .then(() => {
@@ -110,7 +107,9 @@ export const Admin = () => {
     if (selectedUser) {
       deleteUser(userDataRdx.credentials, selectedUser._id)
         .then(() => {
-          const updatedUsers = users.filter((user) => user._id !== selectedUser._id);
+          const updatedUsers = users.filter(
+            (user) => user._id !== selectedUser._id
+          );
           setUsers(updatedUsers);
           handleCloseConfirmationModal();
         })
@@ -118,48 +117,56 @@ export const Admin = () => {
     }
   };
 
+  useEffect(() => {
+    if (criteria !== "") {
+      const bringUsers = setTimeout(() => {
+        getUsers(userDataRdx.credentials, criteria)
+          .then((res) => {
+            setUsers(res.data);
+          })
+          .catch((error) => console.log(error));
+      }, 375);
+  
+      return () => clearTimeout(bringUsers);
+    } else {
+      getUsers(userDataRdx.credentials)
+        .then((results) => {
+          setUsers(results.data);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [criteria]);
+
   return (
     <div className="adminDesign">
-      {users.length > 0 ? (
+
+      <div className="adminInput">
+      <InputGroup className="mb-3">
+        <InputGroup.Text id="basic-addon1"><FcSearch/></InputGroup.Text>
+        <Form.Control
+          type="text"
+          placeholder="search"
+          name="criteria"
+          onChange={(e) => inputHandler(e)}
+        />
+
+      </InputGroup>
+      </div>
+      {users && users.length > 0 ? (
+      <div className="adminTable">
         <table className="table table-striped table-bordered table-hover usersTable">
           <thead className="fixed">
             <tr>
-              <th style={{ width: "5%" }}>#</th>
               <th style={{ width: "30%" }}>Name</th>
               <th style={{ width: "30%" }}>Email</th>
-              <th style={{ width: "10%" }}>Phone Number</th>
+              <th style={{ width: "10%" }}>Phone</th>
               <th style={{ width: "25%" }}>Address</th>
+              <th style={{ width: "5%" }}></th>
             </tr>
           </thead>
           <tbody>
             {users.map((user) => (
               <tr className="selectedRow" key={user._id}>
-                <td>
-                  <div
-                    className="appointmentsButton detail"
-                    onClick={() => handleOpenModalInfo(user)}
-                  >
-                    <FaEye />
-                  </div>
-                  <div
-                    className="appointmentsButton edit"
-                    title="Edit appointment"
-                    onClick={() => handleOpenModalEdit(user)}
-                  >
-                    <FiEdit />
-                  </div>
-                  <div
-                    className="appointmentsButton delete"
-                    title="Delete appointment"
-                    onClick={() => {
-                      handleDeleteUser(user);
-                      deleteUserFunction();
-
-                    }}
-                  >
-                    <AiFillDelete />
-                  </div>
-                </td>
                 <td
                   className="selectedCell"
                   title={
@@ -177,15 +184,38 @@ export const Admin = () => {
                   {truncate(capitalizeWords(user.email), 20)}
                 </td>
                 <td className="selectedCell" title={user.phone_number}>
-                  {truncate(user.phone_number.toString(), 9)}
+                  {user.phone_number}
                 </td>
                 <td className="selectedCell" title={user.address}>
                   {truncate(capitalizeWords(user.address), 22)}
+                </td>
+                <td>
+                    <div className="adminButtons">
+                  <FaEye
+                    className="appointmentsButton detail"
+                    onClick={() => handleOpenModalInfo(user)}
+                  />
+
+                  <FiEdit
+                    className="appointmentsButton edit"
+                    title="Edit appointment"
+                    onClick={() => handleOpenModalEdit(user)}
+                  />
+                  <AiFillDelete
+                    className="appointmentsButton delete"
+                    title="Delete appointment"
+                    onClick={() => {
+                      handleDeleteUser(user);
+                      deleteUserFunction();
+                    }}
+                  />
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        </div>
       ) : (
         <></>
       )}
@@ -339,7 +369,10 @@ export const Admin = () => {
       </Modal>
 
       {selectedUser && (
-        <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+        <Modal
+          show={showConfirmationModal}
+          onHide={handleCloseConfirmationModal}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Confirmation</Modal.Title>
           </Modal.Header>

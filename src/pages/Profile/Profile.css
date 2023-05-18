@@ -1,10 +1,21 @@
 .profileDesign {
-    height: 78vh;
+    height: 84vh;
     width: 100vw;
-
-    background-color: gainsboro;
-
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: red;
+}
+
+.profileDataModal{
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 12em;
+    width: 20em;
+}
+
+a{
+    font-weight: bold;
 }

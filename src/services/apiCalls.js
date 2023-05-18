@@ -5,11 +5,14 @@ export const loginMe = async (credentials) => {
   return await axios.post("http://localhost:5690/user/log", credentials);
 };
 
-export const getUsers = async (credentials) => {
+export const getUsers = async (credentials, query) => {
   const config = {
     headers: {
       Authorization: "Bearer " + credentials.bearer,
     },
+    params:{
+      name: query
+    }
   };
 
   return await axios.get(`http://localhost:5690/user/`, config);

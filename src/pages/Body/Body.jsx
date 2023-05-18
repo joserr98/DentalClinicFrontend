@@ -1,4 +1,5 @@
 import React from 'react'
+import './Body.css'
 import {Route, Routes} from "react-router-dom"
 import {Home} from "../Home/Home"
 import {Login} from "../Login/Login"
@@ -13,7 +14,6 @@ import { Admin } from '../Admin/Admin'
 
 export const Body = () => {
   return (
-    <>
     <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/register" element={<Register/>} />
@@ -26,6 +26,5 @@ export const Body = () => {
         <Route path="/appointment_new" element={<ProfileEdit/>} />
         <Route path="/admin" element={<Admin/>} />
     </Routes>
-    </>
   )
 }
