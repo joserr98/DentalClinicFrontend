@@ -12,13 +12,19 @@ export const detailSlice = createSlice({
         ...action.payload,
       };
     },
+    erase: (state, action) => {
+        return {
+          ...state,
+          ...action.payload,
+        };
+      },
   },
 });
 
 //exporto las ACCIONES.....
 
 //Exporto las acciones para el modo ESCRITURA
-export const { detail } = detailSlice.actions;
+export const { detail, erase } = detailSlice.actions;
 
 //exporto el método para el modo LECTURA
 export const detailData = (state) => state.detail;

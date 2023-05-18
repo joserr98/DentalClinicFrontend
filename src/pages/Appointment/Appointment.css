@@ -1,23 +1,56 @@
-.appointmentDesign{
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    width: 100vw;
+.appointmentDesign {
+  align-items: center;
+  justify-content: space-around;
+  width: 100vw;
+  margin-top: 5em;
+  display: grid;
+  grid-template-columns: 22.5% 22.5% 22.5% 22.5%;
+  margin-bottom: 3em;
+  font-size: 0.8rem;
 }
 
-.delete{
-    color:red
+.card-title {
+  font-size: 0.9rem;
 }
 
-.add{
-    color: green;
+.appointmentCards{
+  margin-bottom: 1em;
+}
+
+.appointmentsButtonDiv {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media (min-width: 715px) {
+  .appointmentDesign {
+    grid-template-columns: 18% 18% 18% 18% 18%;
+    font-size: 1rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+}
+
+.appointmentsButton {
     cursor: pointer;
 }
 
-.edit{
-    color: yellow
+.delete {
+  color: rgb(181, 0, 0);
 }
 
-.detail{
-    color:blue
+.add {
+  color: rgb(26, 149, 26);
+  cursor: pointer;
+}
+
+.edit {
+  color: rgb(211, 211, 32);
+}
+
+.detail {
+  color: #176087;
 }

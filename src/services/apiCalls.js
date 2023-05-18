@@ -5,6 +5,16 @@ export const loginMe = async (credentials) => {
   return await axios.post("http://localhost:5690/user/log", credentials);
 };
 
+export const getUsers = async (credentials) => {
+  const config = {
+    headers: {
+      Authorization: "Bearer " + credentials.bearer,
+    },
+  };
+
+  return await axios.get(`http://localhost:5690/user/`, config);
+};
+
 export const getUserProfile = async (credentials) => {
   const config = {
     headers: {
@@ -20,8 +30,26 @@ export const getUserProfile = async (credentials) => {
 
 export const createUser = async (credentials) => {
   credentials.role = "client";
-  console.log(credentials);
   return await axios.post(`http://localhost:5690/user`, credentials);
+};
+
+export const editUser = async (credentials, user, body) => {
+
+  const config = {
+    headers: {
+      Authorization: "Bearer " + credentials.bearer,
+    }
+  }
+  return await axios.put(`http://localhost:5690/user/${user._id}`, body, config);
+};
+
+export const deleteUser = async (credentials, user) => {
+  const config = {
+    headers: {
+      Authorization: "Bearer " + credentials.bearer,
+    }
+  }
+  return await axios.delete(`http://localhost:5690/user/${user}`, config);
 };
 
 export const getDentists = async () => {
@@ -49,11 +77,11 @@ export const getDetailedAppointment = async (credentials, data) => {
       Authorization: "Bearer " + credentials.bearer,
     },
   };
-
+  
   return await axios.get(
     `http://localhost:5690/appointment/${data._id}`,
     config
-  );
+  )
 };
 
 export const deleteAppointment = async (id, credentials) => {
@@ -79,7 +107,6 @@ export const editAppointment = async (credentials, data, body) => {
 };
 
 export const createAppointment = async (credentials, body) => {
-    console.log(credentials)
   if (credentials.token.role === "client") {
     body.client = credentials.token.id;
   }

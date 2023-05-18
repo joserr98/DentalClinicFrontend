@@ -2,7 +2,8 @@ export const capitalizeWords = (str) => {
   const words = str.split(" ");
 
   const capitalizedWords = words.map((word) => {
-    if (word.toLowerCase() !== "and") {
+    if (word.toLowerCase() !== "and" || word.toLowerCase() !== "del" || word.toLowerCase() !== "a" || word.toLowerCase() !== "en"
+    || word.toLowerCase() !== "la" || word.toLowerCase() !== "el" || word.toLowerCase() !== "y") {
       return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
     } else {
       return word;

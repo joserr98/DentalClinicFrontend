@@ -8,21 +8,23 @@ import Navbar from "react-bootstrap/Navbar";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, userData } from "../../pages/userSlice";
+import { erase } from "../../pages/detailSlice";
 export const Header = () => {
   
-  const datosUserRedux = useSelector(userData);
+  const userDataRdx = useSelector(userData);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const logMeOut = () => {
     dispatch(logout({ credentials: {}}));
+    dispatch(erase({ credentials: {}, date: {}}));
     navigate("/");
   }
-
+  
   return (
     <div className="headerDesign">
-      {!datosUserRedux?.credentials?.token ? (
+      {!userDataRdx?.credentials?.token ? (
         <Navbar className="headerDesign" bg="dark" variant="dark">
           <Container>
             <Navbar.Brand onClick={() => navigate("/")}>Home</Navbar.Brand>
@@ -34,22 +36,26 @@ export const Header = () => {
             </Nav>
           </Container>
         </Navbar>
-      ) : (
+      ) : ( 
         <>
-          <Navbar className="headerDesign" bg="dark" variant="dark">
-            <Container>
-              <Navbar.Brand onClick={() => navigate("/")}>Home</Navbar.Brand>
-              <Nav className="me-auto">
-                {datosUserRedux?.credentials?.role === "admin" && (
-                  <Nav.Link onClick={() => navigate("/admin")}>Admin</Nav.Link>
-                )}
-                <Nav.Link onClick={() => navigate("/profile")}>Profile</Nav.Link>
-                <Nav.Link onClick={() => navigate("/appointments")}>Appointments</Nav.Link>
-                <Nav.Link onClick={()=> logMeOut()}>LogOut</Nav.Link>
-              </Nav>
-            </Container>
-          </Navbar>
-        </>
+        <Navbar className="headerDesign" bg="dark" variant="dark">
+          <Container>
+            <Navbar.Brand onClick={() => navigate("/")}>Home</Navbar.Brand>
+            <Nav className="me-auto">
+              {userDataRdx.credentials.token.role == "admin" && (
+                <Nav.Link onClick={() => navigate("/admin")}>Admin</Nav.Link>
+              )}
+              <Nav.Link onClick={() => navigate("/profile")}>
+                {userDataRdx.credentials.token.name}
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/appointments")}>
+                Appointments
+              </Nav.Link>
+              <Nav.Link onClick={() => logMeOut()}>LogOut</Nav.Link>
+            </Nav>
+          </Container>
+        </Navbar>
+      </>
       )}
     </div>
   );

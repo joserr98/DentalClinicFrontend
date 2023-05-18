@@ -5,12 +5,8 @@ import { useSelector } from "react-redux";
 import { userData } from "../userSlice.js";
 
 import { useNavigate } from "react-router-dom";
-import {
-  getUserProfile
-} from "../../services/apiCalls.js";
-import { Appointment } from "../Appointment/Appointment";
-
-
+import { getUserProfile } from "../../services/apiCalls.js";
+import { FiEdit } from "react-icons/fi";
 export const Profile = () => {
   const [userProfileData, setUserProfileData] = useState({});
 
@@ -32,6 +28,10 @@ export const Profile = () => {
       .catch((err) => console.error(err));
   }, []);
 
+  const editProfileDetail = () => {
+    navigate(`/profile_edit`);
+  };
+
   return (
     <div className="profileDesign">
       {userProfileData._id !== "" ? (
@@ -40,6 +40,13 @@ export const Profile = () => {
           <div>{userProfileData.name}</div>
           <div>{userProfileData.email}</div>
           <div>{userProfileData.phone_number}</div>
+          <div
+            className="appointmentsButton edit"
+            title="Edit appointment"
+            onClick={() => editProfileDetail()}
+          >
+            <FiEdit />
+          </div>
         </div>
       ) : (
         <div>CARGANDO</div>

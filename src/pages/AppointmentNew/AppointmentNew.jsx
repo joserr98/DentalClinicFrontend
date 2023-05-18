@@ -14,17 +14,18 @@ import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { userData } from "../userSlice";
+
 export const AppointmentNew = () => {
   // USEFUL CONSTS
   const navigate = useNavigate();
   const userDataRdx = useSelector(userData);
 
-  //   DATA FROM DB
+  // DATA FROM DB
   const [treatments, setTreatments] = useState([]);
   const [dentists, setDentists] = useState([]);
   const [clients, setClients] = useState([]);
 
-  //   FORM DATA
+  // FORM DATA
   const [newAppointment, setNewAppointment] = useState({
     start_date: "",
     end_date: "",
@@ -33,12 +34,12 @@ export const AppointmentNew = () => {
     type: "",
   });
 
-  //   SELECTS
+  // SELECTS
   const [selectedTreatmentItem, setSelectedTreatmentItem] = useState(null);
   const [selectedDentistItem, setSelectedDentistItem] = useState(null);
   const [selectedClientItem, setSelectedClientItem] = useState(null);
 
-//   USE EFFECTS
+  // USE EFFECTS
   useEffect(() => {
     if (treatments.length === 0) {
       listTreatment()
@@ -111,38 +112,35 @@ export const AppointmentNew = () => {
                   ? truncate(capitalizeWords(selectedTreatmentItem), 10)
                   : "Treatment"}
               </Dropdown.Toggle>
-
               <Dropdown.Menu>
-                {treatments.map((treatment) => {
-                  return (
-                    <Dropdown.Item
-                      key={treatment._id}
-                      onClick={(e) => {
-                        newAppointmentHandler(e, treatment._id);
-                        setTreatment(treatment.name);
-                      }}
-                      name={"type"}
-                    >
-                      {capitalizeWords(treatment.name)}
-                    </Dropdown.Item>
-                  );
-                })}
+                {treatments.map((treatment) => (
+                  <Dropdown.Item
+                    key={treatment._id}
+                    onClick={(e) => {
+                      newAppointmentHandler(e, treatment._id);
+                      setTreatment(treatment.name);
+                    }}
+                    name={"type"}
+                  >
+                    {capitalizeWords(treatment.name)}
+                  </Dropdown.Item>
+                ))}
               </Dropdown.Menu>
             </Dropdown>
           )}
         </div>
         <div className="specialistDropdown">
-          {userDataRdx.credentials.role != "dentist" ? (
-            <Dropdown className="mb-3">
-              <Dropdown.Toggle variant="success" id="dropdown-basic">
-                {selectedDentistItem
-                  ? truncate(capitalizeWords(selectedDentistItem), 10)
-                  : "Dentist"}
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                {dentists.map((dentist) => {
-                  return (
+          {dentists.length > 0 &&
+            userDataRdx.credentials &&
+            userDataRdx.credentials.token.role !== "dentist" && (
+              <Dropdown className="mb-3">
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  {selectedDentistItem
+                    ? truncate(capitalizeWords(selectedDentistItem), 10)
+                    : "Dentist"}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {dentists.map((dentist) => (
                     <Dropdown.Item
                       key={dentist._id}
                       onClick={(e) => {
@@ -153,24 +151,21 @@ export const AppointmentNew = () => {
                     >
                       {capitalizeWords(dentist.name)}
                     </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
-          ) : (
-            <div></div>
-          )}
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
 
-          {userDataRdx.credentials.role != "client" ? (
-            <Dropdown className="mb-3">
-              <Dropdown.Toggle variant="success" id="dropdown-basic">
-                {selectedClientItem
-                  ? truncate(capitalizeWords(selectedClientItem), 10)
-                  : "Client"}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {clients.map((client) => {
-                  return (
+          {clients.length > 0 &&
+            userDataRdx.credentials.token.role !== "client" && (
+              <Dropdown className="mb-3">
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  {selectedClientItem
+                    ? truncate(capitalizeWords(selectedClientItem), 10)
+                    : "Client"}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {clients.map((client) => (
                     <Dropdown.Item
                       key={client._id}
                       onClick={(e) => {
@@ -181,13 +176,10 @@ export const AppointmentNew = () => {
                     >
                       {capitalizeWords(client.name)}
                     </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
-          ) : (
-            <div></div>
-          )}
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
         </div>
         <Form className="form">
           <Form.Group className="mb-3" controlId="formBasicStartDate">
@@ -210,10 +202,9 @@ export const AppointmentNew = () => {
             />
           </Form.Group>
         </Form>
-        <Button
-          variant="primary"
-          onClick={() => createAppointmentButton()}
-        ></Button>
+        <Button variant="primary" onClick={() => createAppointmentButton()}>
+          New Appointment
+        </Button>
       </div>
     </div>
   );

@@ -14,14 +14,23 @@ import {
 } from "../../services/apiCalls";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Appointment.css";
-import { capitalizeWords, formatedDate } from "../../services/functions.js";
+import {
+  capitalizeWords,
+  formatedDate,
+  truncate,
+} from "../../services/functions.js";
+import { Button, Modal } from "react-bootstrap";
 
 export const Appointment = () => {
   const [userAppointments, setUserAppointments] = useState([]);
+  const [criteria, setCriteria] = useState("");
 
   const userDataRdx = useSelector(userData);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   useEffect(() => {
     if (!userDataRdx.credentials.token) {
@@ -51,6 +60,16 @@ export const Appointment = () => {
     navigate(`/appointment_new`);
   };
 
+  const handleDeleteAppointment = (appointment) => {
+    setSelectedAppointment(appointment);
+    setShowConfirmationModal(true);
+  };
+
+  const handleCloseConfirmationModal = () => {
+    setSelectedAppointment(null);
+    setShowConfirmationModal(false);
+  };
+
   const deleteAppointmentFunction = (_id) => {
     deleteAppointment(_id, userDataRdx.credentials)
       .then(() => {
@@ -58,29 +77,42 @@ export const Appointment = () => {
           (appointment) => appointment._id !== _id
         );
         setUserAppointments(updatedAppointments);
+        handleCloseConfirmationModal();
       })
       .catch((error) => console.error(error));
   };
 
+  const inputHandler = (e) => {
+    setCriteria(e.target.value);
+  };
+
   return (
     <div className="appointmentDesign">
+      <div className="appointmentsButton add" onClick={createNewAppointment}>
+        <IoIosAddCircleOutline />
+      </div>
       {userAppointments.length > 0 ? (
         userAppointments.map((appointment) => {
           return (
-            <div key={appointment._id}>
+            <div className="appointmentCards" key={appointment._id}>
               <Card>
                 <Card.Body>
                   <Card.Title>
                     {formatedDate(appointment.start_date)}
                   </Card.Title>
                   <Card.Text>
-                    {capitalizeWords(appointment.type.name)}
+                    {truncate(capitalizeWords(appointment.type.name), 8)}
                   </Card.Text>
                   <Card.Text>
-                    Dentist: {}
-                    {capitalizeWords(appointment.dentist.name)}
+                    {truncate(capitalizeWords(appointment.client.name), 8)}
                   </Card.Text>
                   <div className="appointmentsButtonDiv">
+                    <div
+                      className="appointmentsButton detail"
+                      onClick={() => getAppointmentDetail(appointment)}
+                    >
+                      <FaEye />
+                    </div>
                     <div
                       className="appointmentsButton edit"
                       title="Edit appointment"
@@ -91,16 +123,10 @@ export const Appointment = () => {
                     <div
                       className="appointmentsButton delete"
                       title="Delete appointment"
-                      onClick={() => deleteAppointmentFunction(appointment._id)}
+                      onClick={() => handleDeleteAppointment(appointment)}
                     >
                       <AiFillDelete />
                     </div>
-                  </div>
-                  <div
-                    className="detail"
-                    onClick={() => getAppointmentDetail(appointment)}
-                  >
-                    <FaEye />
                   </div>
                 </Card.Body>
               </Card>
@@ -110,9 +136,30 @@ export const Appointment = () => {
       ) : (
         <></>
       )}
-      <div className="add" onClick={() => createNewAppointment()}>
-        <IoIosAddCircleOutline />
-      </div>
+
+      <Modal
+        show={showConfirmationModal}
+        onHide={handleCloseConfirmationModal}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to delete this appointment?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseConfirmationModal}>
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => deleteAppointmentFunction(selectedAppointment._id)}
+          >
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
