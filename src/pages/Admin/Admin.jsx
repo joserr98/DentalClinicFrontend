@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { userData } from "../userSlice.js";
-import { detail } from "../detailSlice.js";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 import { FiEdit } from "react-icons/fi";
@@ -13,8 +12,8 @@ import { getUsers, editUser, deleteUser } from "../../services/apiCalls.js";
 import "./Admin.css";
 import { capitalizeWords, truncate } from "../../services/functions.js";
 import { Button, Modal, Form } from "react-bootstrap";
-import Dropdown from "react-bootstrap/Dropdown";
-import InputGroup from 'react-bootstrap/InputGroup';
+import InputGroup from "react-bootstrap/InputGroup";
+import { AdminPanelModal } from "../../common/AdminPanelModal/AdminPanelModal.jsx";
 
 export const Admin = () => {
   const [users, setUsers] = useState([]);
@@ -25,6 +24,7 @@ export const Admin = () => {
   const [showModalInfo, setShowModalInfo] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+
   const [editedData, setEditedData] = useState({
     name: "",
     lastname: "",
@@ -47,6 +47,7 @@ export const Admin = () => {
   const inputHandler = (e) => {
     setCriteria(e.target.value);
   };
+
   const roleHandler = (e, role) => {
     e.preventDefault();
     setSelectedRole(role);
@@ -58,6 +59,15 @@ export const Admin = () => {
 
   const handleOpenModalEdit = (user) => {
     setSelectedUser(user);
+    setEditedData({
+      name: user.name,
+      lastname: user.lastname,
+      email: user.email,
+      password: user.password,
+      address: user.address,
+      phone_number: user.phone_number,
+      role: user.role,
+    });
     setShowModalEdit(true);
   };
 
@@ -95,10 +105,20 @@ export const Admin = () => {
     }
   }, []);
 
+  const [showToast, setShowToast] = useState(false);
+
   const editUserFunction = () => {
+    if (editedData.password === undefined) {
+      setShowToast(true);
+    }
     editUser(userDataRdx.credentials, selectedUser, editedData)
       .then(() => {
-        navigate("/admin");
+        setShowModalEdit(false);
+        getUsers(userDataRdx.credentials)
+          .then((results) => {
+            setUsers(results.data);
+          })
+          .catch((err) => console.error(err));
       })
       .catch((error) => console.log(error));
   };
@@ -126,7 +146,7 @@ export const Admin = () => {
           })
           .catch((error) => console.log(error));
       }, 375);
-  
+
       return () => clearTimeout(bringUsers);
     } else {
       getUsers(userDataRdx.credentials)
@@ -139,207 +159,104 @@ export const Admin = () => {
 
   return (
     <div className="adminDesign">
-
       <div className="adminInput">
-      <InputGroup className="mb-3">
-        <InputGroup.Text id="basic-addon1"><FcSearch/></InputGroup.Text>
-        <Form.Control
-          type="text"
-          placeholder="search"
-          name="criteria"
-          onChange={(e) => inputHandler(e)}
-        />
-
-      </InputGroup>
+        <InputGroup className="mb-3">
+          <InputGroup.Text id="basic-addon1">
+            <FcSearch />
+          </InputGroup.Text>
+          <Form.Control
+            type="text"
+            placeholder="search"
+            name="criteria"
+            onChange={(e) => inputHandler(e)}
+          />
+        </InputGroup>
       </div>
       {users && users.length > 0 ? (
-      <div className="adminTable">
-        <table className="table table-striped table-bordered table-hover usersTable">
-          <thead className="fixed">
-            <tr>
-              <th style={{ width: "30%" }}>Name</th>
-              <th style={{ width: "30%" }}>Email</th>
-              <th style={{ width: "10%" }}>Phone</th>
-              <th style={{ width: "25%" }}>Address</th>
-              <th style={{ width: "5%" }}></th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr className="selectedRow" key={user._id}>
-                <td
-                  className="selectedCell"
-                  title={
-                    capitalizeWords(user.name) +
-                    " " +
-                    capitalizeWords(user.lastname)
-                  }
-                >
-                  {truncate(
-                    capitalizeWords(`${user.name} ${user.lastname}`),
-                    30
-                  )}
-                </td>
-                <td className="selectedCell" title={user.email}>
-                  {truncate(capitalizeWords(user.email), 20)}
-                </td>
-                <td className="selectedCell" title={user.phone_number}>
-                  {user.phone_number}
-                </td>
-                <td className="selectedCell" title={user.address}>
-                  {truncate(capitalizeWords(user.address), 22)}
-                </td>
-                <td>
-                    <div className="adminButtons">
-                  <FaEye
-                    className="appointmentsButton detail"
-                    onClick={() => handleOpenModalInfo(user)}
-                  />
-
-                  <FiEdit
-                    className="appointmentsButton edit"
-                    title="Edit appointment"
-                    onClick={() => handleOpenModalEdit(user)}
-                  />
-                  <AiFillDelete
-                    className="appointmentsButton delete"
-                    title="Delete appointment"
-                    onClick={() => {
-                      handleDeleteUser(user);
-                      deleteUserFunction();
-                    }}
-                  />
-                  </div>
-                </td>
+        <div className="adminTable">
+          <table className="table table-striped table-bordered table-hover usersTable">
+            <thead className="fixed">
+              <tr>
+                <th style={{ width: "30%" }}>Name</th>
+                <th style={{ width: "30%" }}>Email</th>
+                <th style={{ width: "10%" }}>Phone</th>
+                <th style={{ width: "25%" }}>Address</th>
+                <th style={{ width: "5%" }}></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr className="selectedRow" key={user._id}>
+                  <td
+                    title={
+                      capitalizeWords(user.name) +
+                      " " +
+                      capitalizeWords(user.lastname)
+                    }
+                  >
+                    {truncate(
+                      capitalizeWords(`${user.name} ${user.lastname}`),
+                      30
+                    )}
+                  </td>
+                  <td title={user.email}>
+                    {truncate(capitalizeWords(user.email), 20)}
+                  </td>
+                  <td title={user.phone_number}>{user.phone_number}</td>
+                  <td title={user.address}>
+                    {truncate(capitalizeWords(user.address), 22)}
+                  </td>
+                  <td>
+                    <div className="adminButtons">
+                      <FaEye
+                        className="appointmentsButton detail"
+                        onClick={() => handleOpenModalInfo(user)}
+                      />
+
+                      <FiEdit
+                        className="appointmentsButton edit"
+                        title="Edit appointment"
+                        onClick={() => handleOpenModalEdit(user)}
+                      />
+                      <AiFillDelete
+                        className="appointmentsButton delete"
+                        title="Delete appointment"
+                        onClick={() => {
+                          handleDeleteUser(user);
+                          deleteUserFunction();
+                        }}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       ) : (
         <></>
       )}
-      <Modal show={showModalEdit} onHide={handleCloseModalEdit}>
-        <Modal.Header closeButton>
-          <Modal.Title></Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedUser && (
-            <Form>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder={selectedUser.name}
-                  name={"name"}
-                  onChange={(e) => inputHandlerFunction(e)}
-                  autoFocus
-                />
-              </Form.Group>
 
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlLastname"
-              >
-                <Form.Label>Lastname</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder={selectedUser.lastname}
-                  name={"lastname"}
-                  onChange={(e) => inputHandlerFunction(e)}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="exampleForm.ControlEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder={selectedUser.email}
-                  name={"email"}
-                  onChange={(e) => inputHandlerFunction(e)}
-                />
-              </Form.Group>
-
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlPassword"
-              >
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder={selectedUser.password}
-                  name={"password"}
-                  onChange={(e) => inputHandlerFunction(e)}
-                />
-              </Form.Group>
-
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlPhoneNumber"
-              >
-                <Form.Label>Phone Number</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder={selectedUser.phone_number}
-                  name={"phone_number"}
-                  onChange={(e) => inputHandlerFunction(e)}
-                />
-              </Form.Group>
-
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlAddress"
-              >
-                <Form.Label>Address</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={1}
-                  placeholder={selectedUser.address}
-                  name={"address"}
-                  onChange={(e) => inputHandlerFunction(e)}
-                />
-              </Form.Group>
-
-              <Dropdown className="mb-3">
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  {capitalizeWords(selectedRole)
-                    ? truncate(capitalizeWords(selectedRole), 10)
-                    : capitalizeWords(selectedUser.role)}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={(e) => roleHandler(e, "client")}
-                    name="client"
-                  >
-                    Client
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={(e) => roleHandler(e, "dentist")}
-                    name="dentist"
-                  >
-                    Dentist
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={(e) => roleHandler(e, "admin")}
-                    name="admin"
-                  >
-                    Admin
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </Form>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModalEdit}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={() => editUserFunction()}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
+      {selectedUser && (
+        <AdminPanelModal
+          selectedUser={selectedUser}
+          name={selectedUser.name}
+          password={selectedUser.password}
+          lastname={selectedUser.lastname}
+          email={selectedUser.email}
+          phone_number={selectedUser.phone_number}
+          address={selectedUser.address}
+          role={selectedUser.role}
+          currentRole={selectedRole}
+          showModalEdit={showModalEdit}
+          handleCloseModalEdit={handleCloseModalEdit}
+          inputHandlerFunction={inputHandlerFunction}
+          roleHandler={roleHandler}
+          editUserFunction={editUserFunction}
+          setShowToast={setShowToast}
+          showToast={showToast}
+        />
+      )}
       <Modal show={showModalInfo} onHide={handleCloseModalInfo}>
         <Modal.Header closeButton>
           <Modal.Title>Info</Modal.Title>

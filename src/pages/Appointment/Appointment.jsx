@@ -4,22 +4,18 @@ import { userData } from "../userSlice.js";
 import { detail } from "../detailSlice.js";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
-import { FiEdit } from "react-icons/fi";
-import { AiFillDelete } from "react-icons/ai";
+
+
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { FaEye } from "react-icons/fa";
+
 import {
   deleteAppointment,
   getUserAppointments,
 } from "../../services/apiCalls";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Appointment.css";
-import {
-  capitalizeWords,
-  formatedDate,
-  truncate,
-} from "../../services/functions.js";
 import { Button, Modal } from "react-bootstrap";
+import { AppointmentCard } from "../../common/AppointmentCard/AppointmentCard.jsx";
 
 export const Appointment = () => {
   const [userAppointments, setUserAppointments] = useState([]);
@@ -59,7 +55,7 @@ export const Appointment = () => {
     navigate(`/appointment_new`);
   };
 
-  const handleDeleteAppointment = (appointment) => {
+  const deleteAppointmentDetail = (appointment) => {
     setSelectedAppointment(appointment);
     setShowConfirmationModal(true);
   };
@@ -92,47 +88,23 @@ export const Appointment = () => {
         userAppointments.map((appointment) => {
           return (
             <div className="appointmentCards" key={appointment._id}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>
-                    {formatedDate(appointment.start_date)}
-                  </Card.Title>
-                  <Card.Text>
-                    {truncate(capitalizeWords(appointment.type.name), 8)}
-                  </Card.Text>
-                  <Card.Text>
-                    {truncate(capitalizeWords(appointment.client.name), 8)}
-                  </Card.Text>
-                  <div className="appointmentsButtonDiv">
-                    <div
-                      className="appointmentsButton detail"
-                      onClick={() => getAppointmentDetail(appointment)}
-                    >
-                      <FaEye />
-                    </div>
-                    <div
-                      className="appointmentsButton edit"
-                      title="Edit appointment"
-                      onClick={() => editAppointmentDetail(appointment)}
-                    >
-                      <FiEdit />
-                    </div>
-                    <div
-                      className="appointmentsButton delete"
-                      title="Delete appointment"
-                      onClick={() => handleDeleteAppointment(appointment)}
-                    >
-                      <AiFillDelete />
-                    </div>
-                  </div>
-                </Card.Body>
-              </Card>
+              <AppointmentCard
+                start_date={appointment.start_date}
+                dentist_name={appointment.dentist.name}
+                client_name={appointment.client.name}
+                type={appointment.type.name}
+                appointment={appointment}
+                getAppointment={getAppointmentDetail}
+                editAppointment={editAppointmentDetail}
+                deleteAppointment={deleteAppointmentDetail}
+                />
             </div>
           );
         })
       ) : (
         <></>
       )}
+
 
       <Modal
         show={showConfirmationModal}

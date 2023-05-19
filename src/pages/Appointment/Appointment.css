@@ -4,7 +4,7 @@
   width: 100vw;
   margin-top: 5em;
   display: grid;
-  grid-template-columns: 22.5% 22.5% 22.5% 22.5%;
+  grid-template-columns: 45% 45%;
   margin-bottom: 3em;
   font-size: 0.8rem;
 }
@@ -23,6 +23,17 @@
   justify-content: flex-end;
 }
 
+@media (min-width: 480px) {
+  .appointmentDesign {
+    grid-template-columns: 22.5% 22.5% 22.5% 22.5%;
+    font-size: 0.8rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+}
+
 @media (min-width: 715px) {
   .appointmentDesign {
     grid-template-columns: 18% 18% 18% 18% 18%;
@@ -33,6 +44,7 @@
     font-size: 1rem;
   }
 }
+
 
 .appointmentsButton {
     cursor: pointer;
