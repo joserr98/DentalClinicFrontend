@@ -5,9 +5,6 @@ img{
 }
 
 .homeDesign{
-    /* background-image: url('../../assets/home_image.jpg'); */
-    /* background-repeat: no-repeat; */
-    /* background-size: 40em 100vh; */
     height: 100em;
     
     width: 100vw;
@@ -27,8 +24,8 @@ img{
     display: flex;
     text-align: center;
     align-items: center;
-    background: #24b9cc;
     font-weight: bold;
+    color: #176087;
     }
 
 .img-section{
@@ -46,6 +43,7 @@ img{
     flex-wrap: wrap;
     align-content: center;
     font-size: 0.8rem;
+    padding: 2em;
 }
 
 .white{

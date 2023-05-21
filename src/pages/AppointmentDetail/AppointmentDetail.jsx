@@ -12,8 +12,7 @@ export const AppointmentDetail = () => {
   const userDataRdx = useSelector(userData);
   const detailDataRdx = useSelector(detailData);
   const [detailedAppointment, setDetailedAppointment] = useState([]);
-  const [show, setShow] = useState(true);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     getDetailedAppointment(userDataRdx.credentials, detailDataRdx.data)
@@ -23,21 +22,38 @@ export const AppointmentDetail = () => {
       .catch((err) => console.error(err));
   }, []);
 
+  useEffect(() => {
+    if (!userDataRdx.credentials.token) {
+      navigate("/");
+    }
+  }, []);
+
   return Object.keys(detailedAppointment).length === 0 ? (
     <div>Loading...</div>
   ) : (
     <div className="detailDesign">
-    <div
-      className="modal show"
-      style={{ display: 'block', position: 'initial' }}
-    >
-      <Modal.Dialog>
-        <Modal.Header closeButton onClick={() => navigate('/appointments')}>
-          <Modal.Title>{formatedDate(detailedAppointment.start_date)}</Modal.Title>
-        </Modal.Header>
+      <div
+        className="modal show"
+        style={{ display: "block", position: "initial" }}
+      >
+        <Modal.Dialog>
+          <Modal.Header
+            closeButton
+            onClick={() => {
+              if (userDataRdx.credentials.token.role !== "admin") {
+                navigate("/profile");
+              } else {
+                navigate("/appointments");
+              }
+            }}
+          >
+            <Modal.Title>
+              {formatedDate(detailedAppointment.start_date)}
+            </Modal.Title>
+          </Modal.Header>
 
-        <Modal.Body>
-        <Card>
+          <Modal.Body>
+            <Card>
               <Card.Body>
                 <Card.Title>
                   {capitalizeWords(detailedAppointment.type.name)}
@@ -52,15 +68,11 @@ export const AppointmentDetail = () => {
                 </Card.Text>
               </Card.Body>
             </Card>
-        </Modal.Body>
+          </Modal.Body>
 
-        <Modal.Footer>
-
-        </Modal.Footer>
-      </Modal.Dialog>
-    </div>
-
+          <Modal.Footer></Modal.Footer>
+        </Modal.Dialog>
       </div>
-
+    </div>
   );
 };

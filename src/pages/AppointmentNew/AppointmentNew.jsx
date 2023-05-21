@@ -78,10 +78,6 @@ export const AppointmentNew = () => {
       .catch((error) => console.log(error));
   };
 
-  useEffect(() => {
-    console.log(newAppointment);
-  });
-
   const newAppointmentHandler = (e, value) => {
     setNewAppointment((prevState) => ({
       ...prevState,
@@ -101,6 +97,12 @@ export const AppointmentNew = () => {
     setSelectedClientItem(selected);
   };
 
+  useEffect(() => {
+    if (!userDataRdx.credentials.token) {
+      navigate("/");
+    }
+  }, []);
+  
   return (
     <div className="newAppointmentDesign">
       <div className="newAppointmentForm">

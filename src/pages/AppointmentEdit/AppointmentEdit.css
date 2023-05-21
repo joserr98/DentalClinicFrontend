@@ -1,9 +1,9 @@
 .appointmentEditDesign{
     width: 100vw;
     height: 84vh;
-    background-color: red;
     display: flex;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
 }
 

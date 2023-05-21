@@ -1,0 +1,13 @@
+.newAppointmentDesign{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+}
+
+.newAppointmentForm{
+    background: #24B9CC;
+    padding: 2em;
+    border-radius: 2em;
+    border: 0.3em solid #176087;
+}

@@ -110,12 +110,18 @@ export const editAppointment = async (credentials, data, body) => {
 };
 
 export const createAppointment = async (credentials, body) => {
+
   if (credentials.token.role === "client") {
     body.client = credentials.token.id;
   }
   if (credentials.token.role === "dentist") {
     body.dentist = credentials.token.id;
   }
+
+  if(!body.client || !body.dentist || !body.start_date || !body.end_date){
+    throw new Error ('UNCOMPLETED_FORM')
+  }
+
   const config = {
     headers: {
       Authorization: "Bearer " + credentials.bearer,

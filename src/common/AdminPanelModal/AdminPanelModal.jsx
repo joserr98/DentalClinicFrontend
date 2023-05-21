@@ -2,11 +2,12 @@ import React from "react";
 import "./AdminPanelModal.css";
 import { Button, Modal, Form } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
-import { capitalizeWords, truncate} from "../../services/functions";
+import { capitalizeWords, truncate } from "../../services/functions";
 import Toast from "react-bootstrap/Toast";
-
+import { useSelector } from "react-redux";
+import { userData } from "../../pages/userSlice";
 export const AdminPanelModal = ({
-selectedUser,
+  selectedUser,
   name,
   lastname,
   email,
@@ -21,8 +22,9 @@ selectedUser,
   roleHandler,
   editUserFunction,
   showToast,
-  setShowToast
+  setShowToast,
 }) => {
+  const userDataRdx = useSelector(userData);
   return (
     <Modal show={showModalEdit} onHide={handleCloseModalEdit}>
       <Modal.Header closeButton>
@@ -31,7 +33,7 @@ selectedUser,
       <Modal.Body>
         {selectedUser && (
           <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlName">
+            <Form.Group controlId="exampleForm.ControlName">
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
@@ -42,10 +44,7 @@ selectedUser,
               />
             </Form.Group>
 
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlLastname"
-            >
+            <Form.Group controlId="exampleForm.ControlLastname">
               <Form.Label>Lastname</Form.Label>
               <Form.Control
                 type="text"
@@ -55,7 +54,7 @@ selectedUser,
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="exampleForm.ControlEmail">
+            <Form.Group controlId="exampleForm.ControlEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control
                 type="email"
@@ -65,10 +64,7 @@ selectedUser,
               />
             </Form.Group>
 
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlPassword"
-            >
+            <Form.Group controlId="exampleForm.ControlPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
@@ -78,10 +74,7 @@ selectedUser,
               />
             </Form.Group>
 
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlPhoneNumber"
-            >
+            <Form.Group controlId="exampleForm.ControlPhoneNumber">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 type="text"
@@ -101,8 +94,8 @@ selectedUser,
                 onChange={(e) => inputHandlerFunction(e)}
               />
             </Form.Group>
-
-            <Dropdown className="mb-3">
+            {userDataRdx.credentials.token.role == 'admin'  && (
+            <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
                 {capitalizeWords(currentRole)
                   ? truncate(capitalizeWords(currentRole), 10)
@@ -129,6 +122,7 @@ selectedUser,
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
+            )}
           </Form>
         )}
       </Modal.Body>
@@ -158,7 +152,6 @@ selectedUser,
           <Toast.Body>Please, make sure you enter your password.</Toast.Body>
         </Toast>
       </div>
-
     </Modal>
   );
 };

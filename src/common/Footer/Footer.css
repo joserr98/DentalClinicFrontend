@@ -1,7 +1,7 @@
 .footerDesign{
     height: 8vh;
     width: 100%;
-    background: linear-gradient(0deg, #176087 0%, #24b9cc 50%, #176087 100%);
+    background:#176087;
     color: white;
     font-weight: bold;
     display: flex;

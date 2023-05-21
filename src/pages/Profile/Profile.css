@@ -1,10 +1,8 @@
 .profileDesign {
     height: 84vh;
-    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: red;
 }
 
 .profileDataModal{
@@ -18,4 +16,11 @@
 
 a{
     font-weight: bold;
+}
+
+.profileContent{
+    width: 100vw;
+    height: 84vh;
+    display: flex;
+    flex-direction: column;
 }

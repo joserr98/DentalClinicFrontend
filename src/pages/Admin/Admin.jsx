@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { userData } from "../userSlice.js";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
@@ -104,6 +104,7 @@ export const Admin = () => {
       navigate("/");
     }
   }, []);
+
 
   const [showToast, setShowToast] = useState(false);
 
@@ -257,6 +258,7 @@ export const Admin = () => {
           showToast={showToast}
         />
       )}
+
       <Modal show={showModalInfo} onHide={handleCloseModalInfo}>
         <Modal.Header closeButton>
           <Modal.Title>Info</Modal.Title>
