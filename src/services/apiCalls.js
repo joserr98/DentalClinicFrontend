@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const url = "http://localhost:5690"
+
 // Users API Calls
 export const loginMe = async (credentials) => {
-  return await axios.post("http://localhost:5690/user/log", credentials);
+  return await axios.post(`${url}/user/log`, credentials);
 };
 
 export const getUsers = async (credentials, query) => {
@@ -15,7 +17,7 @@ export const getUsers = async (credentials, query) => {
     }
   };
 
-  return await axios.get(`http://localhost:5690/user/`, config);
+  return await axios.get(`${url}/user/`, config);
 };
 
 export const getUserProfile = async (credentials) => {
@@ -26,14 +28,14 @@ export const getUserProfile = async (credentials) => {
   };
 
   return await axios.get(
-    `http://localhost:5690/user/${credentials.token.id}`,
+    `${url}/user/${credentials.token.id}`,
     config
   );
 };
 
 export const createUser = async (credentials) => {
   credentials.role = "client";
-  return await axios.post(`http://localhost:5690/user`, credentials);
+  return await axios.post(`${url}/user`, credentials);
 };
 
 export const editUser = async (credentials, user, body) => {
@@ -43,7 +45,7 @@ export const editUser = async (credentials, user, body) => {
       Authorization: "Bearer " + credentials.bearer,
     }
   }
-  return await axios.put(`http://localhost:5690/user/${user._id}`, body, config);
+  return await axios.put(`${url}/user/${user._id}`, body, config);
 };
 
 export const deleteUser = async (credentials, user) => {
@@ -52,15 +54,15 @@ export const deleteUser = async (credentials, user) => {
       Authorization: "Bearer " + credentials.bearer,
     }
   }
-  return await axios.delete(`http://localhost:5690/user/${user}`, config);
+  return await axios.delete(`${url}/user/${user}`, config);
 };
 
 export const getDentists = async () => {
-  return await axios.get(`http://localhost:5690/user/dentists`);
+  return await axios.get(`${url}/user/dentists`);
 };
 
 export const getClients = async () => {
-  return await axios.get(`http://localhost:5690/user/clients`);
+  return await axios.get(`${url}/user/clients`);
 };
 
 // Appointments API Calls
@@ -71,7 +73,7 @@ export const getUserAppointments = async (credentials) => {
     },
   };
 
-  return await axios.get(`http://localhost:5690/appointment/`, config);
+  return await axios.get(`${url}/appointment/`, config);
 };
 
 export const getDetailedAppointment = async (credentials, data) => {
@@ -82,7 +84,7 @@ export const getDetailedAppointment = async (credentials, data) => {
   };
   
   return await axios.get(
-    `http://localhost:5690/appointment/${data._id}`,
+    `${url}/appointment/${data._id}`,
     config
   )
 };
@@ -93,7 +95,7 @@ export const deleteAppointment = async (id, credentials) => {
       Authorization: "Bearer " + credentials.bearer,
     },
   };
-  return await axios.delete(`http://localhost:5690/appointment/${id}`, config);
+  return await axios.delete(`${url}/appointment/${id}`, config);
 };
 
 export const editAppointment = async (credentials, data, body) => {
@@ -103,7 +105,7 @@ export const editAppointment = async (credentials, data, body) => {
     },
   };
   return await axios.put(
-    `http://localhost:5690/appointment/${data._id}`,
+    `${url}/appointment/${data._id}`,
     body,
     config
   );
@@ -128,12 +130,12 @@ export const createAppointment = async (credentials, body) => {
     },
   };
   
-  return await axios.post(`http://localhost:5690/appointment`, body, config);
+  return await axios.post(`${url}/appointment`, body, config);
 };
 
 // Treatments API Calls
 export const listTreatment = async () => {
-  return await axios.get(`http://localhost:5690/treatment`);
+  return await axios.get(`${url}/treatment`);
 };
 
 export const createTreatment = async (credentials) => {
@@ -142,7 +144,7 @@ export const createTreatment = async (credentials) => {
       Authorization: "Bearer " + credentials.bearer,
     },
   };
-  return await axios.post(`http://localhost:5690/treatment`, credentials);
+  return await axios.post(`${url}/treatment`, credentials);
 };
 
 export const deleteTreatment = async (credentials, id) => {
@@ -152,7 +154,7 @@ export const deleteTreatment = async (credentials, id) => {
     },
   };
   return await axios.delete(
-    `http://localhost:5690/treatment/${id}`,
+    `${url}/treatment/${id}`,
     credentials
   );
 };

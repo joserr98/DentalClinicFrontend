@@ -13,3 +13,9 @@
     background-color: green;
     cursor: pointer;
 }
+
+.toast-container-dates {
+    position: absolute;
+    z-index: 1000;
+    left: -7vw;
+  }

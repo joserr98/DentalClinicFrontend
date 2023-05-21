@@ -12,7 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import { capitalizeWords } from "../../services/functions";
-
+import Toast from "react-bootstrap/Toast";
 export const AppointmentEdit = () => {
   const navigate = useNavigate();
   const userDataRdx = useSelector(userData);
@@ -38,8 +38,14 @@ export const AppointmentEdit = () => {
       .catch((err) => console.error(err));
   }, []);
 
+  const [showToast, setShowToast] = useState(false);
+
   const editAppointmentButton = () => {
+
     if (detailDataRdx && detailDataRdx.data) {
+      if(!editedAppointment.start_date || !editedAppointment.end_date){
+        setShowToast(true)
+      }
       editAppointment(
         userDataRdx.credentials,
         detailDataRdx.data,
@@ -115,6 +121,23 @@ export const AppointmentEdit = () => {
         </Button>
             </Form>
         </Card.Body>
+        <div className="toast-container-dates">
+        <Toast
+          bg={"danger"}
+          show={showToast}
+          delay={1350}
+          autohide
+          className="toasted"
+          style={{
+            position: "fixed",
+            zIndex: 999,
+            top: 0,
+          }}
+          onClose={() => setShowToast(false)}
+        >
+          <Toast.Body>Please, make sure you enter both dates.</Toast.Body>
+        </Toast>
+      </div>
       </Card>
     </div>
   );
