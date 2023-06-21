@@ -6,6 +6,7 @@ import { capitalizeWords, truncate } from "../../services/functions";
 import Toast from "react-bootstrap/Toast";
 import { useSelector } from "react-redux";
 import { userData } from "../../pages/userSlice";
+
 export const AdminPanelModal = ({
   selectedUser,
   name,
