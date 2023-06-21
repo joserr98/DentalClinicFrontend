@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "http://localhost:5690"
+const url = "https://dental-clinic-backend.vercel.app/"
 
 // Users API Calls
 export const loginMe = async (credentials) => {
